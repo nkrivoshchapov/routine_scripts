@@ -1,6 +1,21 @@
 import sys,os,glob
-for file in glob.glob("./*log"):
+csvf = open("res.csv","w")
+for file in glob.glob("./nosolv*log"):
     rline = open(file,"r").readlines()
+    normal = False
+    Gval="NA"
+    Eval="NA"
+    for i in reversed(rline):
+        if "Normal termination" in i:
+            normal = True
+        
+        if ("SCF Done" in i or "Sum of electronic and thermal Free Energies" in i) and not normal:
+            break
+        
+        if " Sum of electronic and thermal Free Energies=" in i:
+            Gval=str(float(i.split(" Sum of electronic and thermal Free Energies=")[1].split("\n")[0]))
+        elif "SCF Done" in i and Eval=="NA":
+            Eval=str(float(i.split("=")[1].split("A.U.")[0]))
     start = 0
     end = 0
     res_string=""
@@ -142,5 +157,7 @@ for file in glob.glob("./*log"):
         elif word1 == 118 : word1 = "Uuo"
         res_string += "\n" + "%s%s" % (word1,line[30:-1])
     f = open(file.replace("log","xyz"),"w")
-    f.write(str(len(res_string.split("\n"))-1)+"\n" + res_string+"\n")
+    f.write(str(len(res_string.split("\n"))-1)+"\n" +Eval+";"+Gval+ res_string+"\n")
     f.close()
+    csvf.write(os.path.basename(file.replace("log","xyz"))+","+Eval+","+Gval+"\n")
+csvf.close()

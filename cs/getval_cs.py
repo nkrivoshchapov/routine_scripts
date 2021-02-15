@@ -14,13 +14,14 @@ def getE(line):
         if len(part) > 0:
             vals.append(part)
     return vals[len(vals)-1]
+
 csvlines= []
 for type in types:
     myfile = ""
     min=0
     for file in glob.glob("./"+type+"*.log"):
         print(file)
-        sseq = ['python','-m','goodvibes','-q','-t 273.15','-c 0.3188','--invertifreq=-15',file.replace("./","")]
+        sseq = ['python','-m','goodvibes','-q','-t 273.15','-c 1','--invertifreq=-15',file.replace("./","")]
         print(" ".join(sseq))
         out = subprocess.run(sseq, stdout=subprocess.PIPE)
         outlines = str(out.stdout).split("\\r\\n")
@@ -33,9 +34,7 @@ for type in types:
             min = float(ener)
             myfile = file
         csvlines.append(file.split("\\")[1]+","+ener)
-    print("myfile "+myfile)
-    print("kek "+"./"+type+".log")
-    copy2(myfile,"./"+type+".log")
+    copy2(myfile, "./"+type+".log")
     Path("./"+type+".log").touch()
 cfile=open("res.csv","w")
 cfile.write("\n".join(csvlines))

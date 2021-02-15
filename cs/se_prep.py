@@ -18,7 +18,6 @@ for type in types:
                 break
             gjffile = open(destpath+"/"+xyzfile.split("_")[1]+"_"+str(count)+".gjf","w")
             lines = open(xyzpath+"/"+xyzfile,"r").readlines()
-            #gjffile.write("# opt=maxcycle=300 6-311++g(d,p) scrf=(smd,solvent=methanol) empiricaldispersion=gd3bj rpbe1pbe\n\nConformation\n\n0 1\n")
             gjffile.write("# opt=(maxcycle=300,tight) scrf=(cpcm,solvent=methanol) rpm6\n\nConformation\n\n0 1\n")
             for i in range(1,len(lines)):
                 gjffile.write(lines[i])

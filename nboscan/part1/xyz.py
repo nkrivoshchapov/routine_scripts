@@ -1,5 +1,5 @@
 import sys,os,glob
-for file in glob.glob("./nosolv*log"):
+for file in glob.glob("./*log"):
     rline = open(file,"r").readlines()
     start = 0
     end = 0

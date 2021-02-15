@@ -6,10 +6,10 @@ for file in glob.glob("./*gjf"):
     need=False
     for line in lines:
         if "calcfc" in line or "freq" in line:
-            need=True
+            need = True
             break
     if need:
-        lines.insert(0,"%chk="+ntpath.basename(file).split(".")[0]+".chk\n")
+        lines.insert(0, "%chk="+ntpath.basename(file).split(".")[0]+".chk\n")
         wfile = open(file,"w")
         wfile.write("".join(lines))
         wfile.close()

@@ -20,12 +20,12 @@ for line in lines:
         line = line.replace(" O", "")
         line = line.replace(" C", "")
         line = line.replace(" H", "")
-        shit = line.split(" ")
-        coo = []
-        for i in shit:
+        parts = line.split(" ")
+        newlist = []
+        for i in parts:
             if len(i) > 3:
-                coo.append(float(i))
-        coords.append(coo)
+                newlist.append(float(i))
+        coords.append(newlist)
 coords_back= coords
 atlines_back = atlines
 

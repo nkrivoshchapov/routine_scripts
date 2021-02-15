@@ -1,5 +1,6 @@
 import glob,os,sys
 from shutil import copy2
+
 for calcdir in glob.glob("./*"):
     if os.path.isdir(calcdir):
         try:
@@ -13,6 +14,6 @@ for calcdir in glob.glob("./*"):
                 good = True
                 break
         if good:
-            copy2(calcdir+"/xtbopt.xyz",calcdir+".xyz")
+            copy2(calcdir+"/xtbopt.xyz", calcdir+".xyz")
         else:
-            print("Not normal term for "+calcdir)
+            print("Not normal termination for " + calcdir)

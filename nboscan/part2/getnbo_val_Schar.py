@@ -2,6 +2,7 @@ import sys,os,glob,subprocess
 import ntpath
 import numpy as np
 from numpy.linalg import norm
+
 def getvalangle(points):
     prevvec = points[0]
     curvec = points[1]

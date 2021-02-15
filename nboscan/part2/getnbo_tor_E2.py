@@ -2,6 +2,7 @@ import sys,os,glob,subprocess
 import ntpath
 import numpy as np
 from numpy.linalg import norm
+
 def gettorsion(points):
     # 4 points are given
     fr1_side = points[0] - points[1]
@@ -20,7 +21,7 @@ def gettorsion(points):
         ang = -ang
     return ang
 
-atomnumbers = [2,1,8,13]
+atomnumbers = [2,1,8,13] # NORMAL NUMERATION (FROM 1)
 at0 = atomnumbers[0]+1
 at1 = atomnumbers[1]+1
 at2 = atomnumbers[2]+1
@@ -38,7 +39,7 @@ for filename in glob.glob("./nosolv*xyz"):
     for i in [at0,at1,at2,at3]:
         parts = list(filter(None, xyz_lines[i].replace("\r","").replace("\n","").split(" ")))
         points.append(np.array([float(parts[1]),float(parts[2]),float(parts[3])]))
-    mytor = float(gettorsion(points))*180/3.141593
+    torsion = float(gettorsion(points))*180/3.141593
     
     log_lines = open(filename.replace("xyz","log"), "r").readlines()
     for line in log_lines:
@@ -48,5 +49,5 @@ for filename in glob.glob("./nosolv*xyz"):
             sigmaenergy = float(list(filter(None, line.split(sigmaorb[1])[1].replace("\r","").replace("\n","").split(" ")))[0])
         if backorb[0] in line and backorb[1] in line:
             backenergy = float(list(filter(None, line.split(backorb[1])[1].replace("\r","").replace("\n","").split(" ")))[0])
-    outfile.write("%s,%f,%f,%f,%f,%f\n" % (ntpath.basename(filename), Eenergy, mytor, pienergy, sigmaenergy,backenergy))
+    outfile.write("%s,%f,%f,%f,%f,%f\n" % (ntpath.basename(filename), Eenergy, torsion, pienergy, sigmaenergy,backenergy))
 outfile.close()

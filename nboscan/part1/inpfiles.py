@@ -1,6 +1,6 @@
 import sys,os,glob
 
-for file in glob.glob("./nosolv*xyz"):
+for file in glob.glob("./*xyz"):
     lines = open(file,"r").readlines()
     del lines[0]
     del lines[0]

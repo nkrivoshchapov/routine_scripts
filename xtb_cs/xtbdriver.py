@@ -14,6 +14,6 @@ while len(docalc) > 0 or len(procs) > 0:
             del procs[i]
     while len(procs) < nproc and len(docalc) > 0:
         calcdir = docalc.pop()
-        print("Performing Monte-Carlo CS for " + calcdir.split("/")[0])
+        print("Doing CREST job for file " + calcdir.split("/")[0])
         procs.append(subprocess.Popen("../../runxtbcs.sh " + calcdir.split("/")[1], shell = True))
     time.sleep(1)

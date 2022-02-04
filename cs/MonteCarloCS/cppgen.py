@@ -1,18 +1,25 @@
 from rdkit import Chem
 from rdkit.Chem import AllChem
-from copy import deepcopy
+from copy import deepcopy, copy
 import numpy as np
-import sys,os
+import sys
+import os
 import subprocess
 
-class struc:
-    
-    def __init__(self,name,mol,hbonds=[],poly=[],singles=[]):
+
+class Structure:
+    def __init__(self, name, mol, hbonds=[], poly=[], singles=[], make_copy=True):
         self.name = name
-        self.mol = deepcopy(mol)
-        self.hbonds = deepcopy(hbonds)
-        self.poly = deepcopy(poly)
-        self.sing = deepcopy(singles)
+        if make_copy:
+            self.mol = deepcopy(mol)
+            self.hbonds = deepcopy(hbonds)
+            self.poly = deepcopy(poly)
+            self.sing = deepcopy(singles)
+        else:
+            self.mol = mol
+            self.hbonds = hbonds
+            self.poly = poly
+            self.sing = singles
         self.changelist = []
         
     def setchangelist(self,newlist):
@@ -265,13 +272,14 @@ class struc:
         file = open(self.name+".c","w")
         file.write("".join(lines))
         file.close()
-    
+
+
 def diastereo(startmol, chir_carb, struct):
     newconf = [deepcopy(startmol)]
     for at in chir_carb:
         newconf[0].GetAtomWithIdx(at - 1).SetChiralTag(Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CW)
     for at in chir_carb:
-        oldmol = deepcopy(newconf)
+        oldmol = copy(newconf)
         for mol in oldmol:
             newmol = deepcopy(mol)
             newmol.GetAtomWithIdx(at - 1).SetChiralTag(Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CCW)
@@ -280,31 +288,32 @@ def diastereo(startmol, chir_carb, struct):
     res = []
     ind = 0
     for item in newconf:
-        newitem = deepcopy(struct)
-        Chem.AllChem.EmbedMolecule(item)
-        newitem.mol = item
         ind += 1
-        newitem.name += "iso%d"%(ind)
+        Chem.AllChem.EmbedMolecule(item)
+        newitem = Structure(struct.name + "iso%d" % (ind), item, make_copy=False)
         res.append(newitem)
     return res
 
-def savemol(mol,name):
+
+def savemol(mol, name):
     file = open(name+".sdf","w")
     file.write(Chem.MolToMolBlock(mol))
     file.close()
-    
+
+
 def draw(mol):
     return Chem.Draw.MolToImage(mol)
+
 
 def gv(mol):
     file = open("preview.sdf","w")
     file.write(Chem.MolToMolBlock(mol))
     file.close()
     subprocess.Popen("gview preview.sdf",shell=True)
-    
+
+
 def cc(mol):
     file = open("preview.sdf","w")
     file.write(Chem.MolToMolBlock(mol))
     file.close()
     subprocess.Popen("Chemcraft preview.sdf",shell=True)
-    
